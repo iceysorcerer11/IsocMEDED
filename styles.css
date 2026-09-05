@@ -1,0 +1,145 @@
+/* styles.css — ISOCMEDED MCQ platform design tokens & base styles */
+
+:root {
+  /* radius is tweakable */
+  --radius: 16px;
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-lg: calc(var(--radius) * 1.4);
+  --radius-pill: 999px;
+
+  /* Fresh sky blue — light & aesthetic */
+  --ink:        oklch(0.28 0.04 245);    /* near-black blue for text */
+  --ink-soft:   oklch(0.45 0.035 242);   /* secondary text */
+  --ink-faint:  oklch(0.60 0.025 240);   /* tertiary / captions */
+
+  --navy:       oklch(0.55 0.115 240);   /* primary sky blue */
+  --navy-deep:  oklch(0.45 0.105 243);   /* darker blue */
+  --navy-bright:oklch(0.64 0.115 235);   /* interactive blue */
+  --navy-tint:  oklch(0.945 0.03 232);   /* baby-blue fill */
+  --navy-tint2: oklch(0.89 0.055 232);   /* slightly deeper baby blue */
+
+  /* Bright gold accent */
+  --amber:      oklch(0.82 0.14 88);
+  --amber-deep: oklch(0.66 0.135 80);
+  --amber-tint: oklch(0.96 0.055 92);
+
+  /* Feedback (calm, not alarming) */
+  --good:       oklch(0.58 0.10 158);
+  --good-tint:  oklch(0.95 0.04 160);
+  --good-deep:  oklch(0.45 0.09 158);
+  --bad:        oklch(0.58 0.13 22);
+  --bad-tint:   oklch(0.95 0.035 24);
+  --bad-deep:   oklch(0.47 0.13 24);
+
+  /* Surfaces — white cards on a baby-blue page */
+  --bg:         oklch(1 0 0);            /* page background, pure white */
+  --bg-warm:    oklch(0.985 0.015 92);   /* warm gold-tinted panel */
+  --card:       oklch(1 0 0);
+  --line:       oklch(0.895 0.03 232);
+  --line-soft:  oklch(0.94 0.02 232);
+
+  --shadow-sm: 0 1px 2px oklch(0.4 0.04 250 / 0.06), 0 1px 3px oklch(0.4 0.04 250 / 0.05);
+  --shadow-md: 0 4px 12px oklch(0.4 0.04 250 / 0.08), 0 2px 4px oklch(0.4 0.04 250 / 0.05);
+  --shadow-lg: 0 18px 40px oklch(0.35 0.05 250 / 0.14), 0 6px 14px oklch(0.35 0.05 250 / 0.08);
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Public Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "Quicksand", "Public Sans", system-ui, sans-serif;
+
+  --maxw: 1080px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-variation-settings: "SOFT" 100; /* soft rounded serifs on Fraunces (other fonts ignore it) */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* With body zoomed on desktop, the body's painted area can fall short of the
+   viewport edge; paint html the same colour so no dark strip shows. */
+html { background: var(--bg); min-height: 100%; }
+
+body { min-height: 100vh; }
+
+/* Desktop: scale the UI down so a full screen fits with minimal scrolling.
+   Zoom is applied to #root (not body) so the body still paints the full viewport,
+   avoiding an unpainted strip at the right edge. */
+@media (min-width: 900px) {
+  #root { zoom: 0.80; }
+}
+
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+
+button { font-family: inherit; cursor: pointer; }
+
+::selection { background: var(--amber-tint); }
+
+/* Faint Islamic geometric star pattern (two overlapping squares = 8-point star) */
+.geo-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%234a90c9' stroke-width='1' stroke-opacity='0.5'%3E%3Crect x='24' y='24' width='32' height='32'/%3E%3Crect x='24' y='24' width='32' height='32' transform='rotate(45 40 40)'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 80px 80px;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-weight: 600; font-size: 0.95rem;
+  padding: 0.7rem 1.3rem;
+  transition: transform 0.12s ease, background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  line-height: 1; white-space: nowrap;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--navy); color: #fff; box-shadow: var(--shadow-sm); }
+.btn-primary:hover { background: var(--navy-deep); box-shadow: var(--shadow-md); }
+.btn-ghost { background: transparent; color: var(--navy); border-color: var(--line); }
+.btn-ghost:hover { background: var(--navy-tint); border-color: var(--navy-tint2); }
+.btn-amber { background: var(--amber); color: oklch(0.30 0.05 60); }
+.btn-amber:hover { background: var(--amber-deep); color: #fff; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+  padding: 0.3rem 0.65rem; border-radius: var(--radius-pill);
+  background: var(--navy-tint); color: var(--navy);
+  text-transform: uppercase;
+}
+.chip-amber { background: var(--amber-tint); color: var(--amber-deep); }
+.chip-mono { font-family: var(--font-mono); text-transform: none; letter-spacing: 0; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+.fade-up { animation: fadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.fade-in { animation: fadeIn 0.35s ease both; }
+
+/* Safety net: if the animation timeline is frozen (inactive paint), pin visible */
+body.anim-done .fade-up, body.anim-done .fade-in {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
